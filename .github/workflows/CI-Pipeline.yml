@@ -9,9 +9,9 @@ on:
       - 'main'
 
 permissions:
-  contents: write
-  pull-requests: write
-  pages: write
+  contents: write        # Required for Release Please to create branches and PRs
+  pull-requests: write  # Required for Release Please to create PRs
+  pages: write           # Required for GitHub Pages deployment
 
 jobs:
   bdd-tests:
@@ -48,16 +48,17 @@ jobs:
       - name: Run BDD Tests
         run: mvn clean verify -Dtest=com.jamesstorr.jokes_service.bdd.runner.SpringRunnerTests
 
+      - name: Compress Serenity Reports
+        run: |
+          cd target/site/serenity
+          zip -r ../../serenity-test-reports.zip .  # Zip contents of 'serenity' directory
+
       - name: Archive Serenity Reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: Serenity-Test-Reports
-          path: target/site/serenity
-
-     # - name: Publish Test Results
-
-        # Removed or adjusted as per Option 1 or 2
+          path: target/serenity-test-reports.zip
 
   release-please:
     name: Release Please
@@ -67,7 +68,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -75,7 +76,9 @@ jobs:
         uses: google-github-actions/release-please-action@v3
         with:
           release-type: 'java'  # Specifies Java project
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          DEBUG: 'release-please*'  # Optional: Enable debug logging
 
   deploy-serenity-reports:
     name: Deploy Serenity Reports to GitHub Pages
@@ -88,6 +91,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Download Serenity Reports Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: Serenity-Test-Reports
+          path: target/
+
+      - name: Unzip Serenity Reports
+        run: unzip target/serenity-test-reports.zip -d target/site/serenity
 
       - name: Setup Git
         run: |
