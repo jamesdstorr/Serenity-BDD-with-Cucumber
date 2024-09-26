@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+external:
+  officialjokeapi:
+    base-url: https://official-joke-api.appspot.com
+  chucknorrisapi:
+    base-url: https://api.chucknorris.io
+  jokeapi:
+    base-url: https://v2.jokeapi.dev

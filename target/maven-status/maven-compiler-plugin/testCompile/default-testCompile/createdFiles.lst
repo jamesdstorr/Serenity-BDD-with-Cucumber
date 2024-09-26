@@ -1,0 +1,5 @@
+com/jamesstorr/jokes_service/bdd/runner/SpringRunnerTests.class
+com/jamesstorr/jokes_service/bdd/steps/JokeStepDefinitions.class
+com/jamesstorr/jokes_service/bdd/actions/JokeApiActions.class
+com/jamesstorr/jokes_service/bdd/stubs/JokeApiStubs.class
+com/jamesstorr/jokes_service/bdd/config/WiremockConfig.class

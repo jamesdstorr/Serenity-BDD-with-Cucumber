@@ -1,0 +1,17 @@
+external:
+  officialjokeapi:
+    base-url: http://localhost:9090/officialJoke
+  chucknorrisapi:
+    base-url: http://localhost:9090/chuckNorris
+  jokeapi:
+    base-url: http://localhost:9090/jokeAPI
+
+spring:
+  freemarker:
+    check-template-location: false
+
+logging:
+  level:
+    com.github.tomakehurst.wiremock: DEBUG
+    io.restassured: DEBUG
+    org.springframework.web: DEBUG

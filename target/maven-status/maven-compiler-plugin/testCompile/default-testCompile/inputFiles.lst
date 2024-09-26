@@ -1,0 +1,5 @@
+/Users/jamesstorr/Projects/Serenity-BDD-with-Cucumber/src/test/java/com/jamesstorr/jokes_service/bdd/config/WiremockConfig.java
+/Users/jamesstorr/Projects/Serenity-BDD-with-Cucumber/src/test/java/com/jamesstorr/jokes_service/bdd/actions/JokeApiActions.java
+/Users/jamesstorr/Projects/Serenity-BDD-with-Cucumber/src/test/java/com/jamesstorr/jokes_service/bdd/runner/SpringRunnerTests.java
+/Users/jamesstorr/Projects/Serenity-BDD-with-Cucumber/src/test/java/com/jamesstorr/jokes_service/bdd/stubs/JokeApiStubs.java
+/Users/jamesstorr/Projects/Serenity-BDD-with-Cucumber/src/test/java/com/jamesstorr/jokes_service/bdd/steps/JokeStepDefinitions.java
