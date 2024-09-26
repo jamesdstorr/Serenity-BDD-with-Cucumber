@@ -51,7 +51,7 @@ jobs:
       - name: Compress Serenity Reports
         run: |
           cd target/site/serenity
-          zip -r ../../serenity-test-reports.zip .  # Zip contents of 'serenity' directory
+          zip -r ../../../serenity-test-reports.zip .  # Zip contents of 'serenity' directory
 
       - name: Archive Serenity Reports
         if: always()
@@ -59,6 +59,28 @@ jobs:
         with:
           name: Serenity-Test-Reports
           path: target/serenity-test-reports.zip
+          retention-days: 3  # Optional: Set artifact retention period
+
+      # Optional: Publish Test Results Using JUnit Reporter
+      - name: Publish Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Serenity BDD Tests
+          path: target/surefire-reports/*.xml  # Ensure this path matches your JUnit reports
+          reporter: junit
+
+      # Optional: Notify Slack on Failure
+      # - name: Send Slack Notification on Failure
+      #   if: failure()
+      #   uses: slackapi/slack-github-action@v1.23.0
+      #   with:
+      #     payload: |
+      #       {
+      #         "text": "BDD Tests Failed in <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|this run>."
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   release-please:
     name: Release Please
@@ -80,6 +102,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           DEBUG: 'release-please*'  # Optional: Enable debug logging
 
+      # Optional: Automatically Merge Release PR
+      # - name: Automatically Merge Release PR
+      #   if: success()
+      #   uses: actions/auto-merge@v2
+      #   with:
+      #     github_token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+      #     merge_method: 'squash'  # Options: 'merge', 'squash', 'rebase'
+
+      # Optional: Notify Slack on Release
+      # - name: Send Slack Notification on Release
+      #   if: success()
+      #   uses: slackapi/slack-github-action@v1.23.0
+      #   with:
+      #     payload: |
+      #       {
+      #         "text": "A new release has been created in <https://github.com/${{ github.repository }}/releases|${{ github.repository }}>."
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
   deploy-serenity-reports:
     name: Deploy Serenity Reports to GitHub Pages
     runs-on: ubuntu-latest
@@ -98,8 +140,11 @@ jobs:
           name: Serenity-Test-Reports
           path: target/
 
+      - name: Clean Deployment Directory
+        run: rm -rf target/site/serenity/*  # Optional: Clean existing reports
+
       - name: Unzip Serenity Reports
-        run: unzip target/serenity-test-reports.zip -d target/site/serenity
+        run: unzip -o target/serenity-test-reports.zip -d target/site/serenity
 
       - name: Setup Git
         run: |
