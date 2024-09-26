@@ -62,13 +62,13 @@ jobs:
           retention-days: 3  # Optional: Set artifact retention period
 
       # Optional: Publish Test Results Using JUnit Reporter
-      - name: Publish Test Results
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Serenity BDD Tests
-          path: target/surefire-reports/*.xml  # Ensure this path matches your JUnit reports
-          reporter: junit-xml
+#      - name: Publish Test Results
+#        if: always()
+#        uses: dorny/test-reporter@v1
+#        with:
+#          name: Serenity BDD Tests
+#          path: target/surefire-reports/*.xml  # Ensure this path matches your JUnit reports
+#          reporter: junit-xml
 
       # Optional: Notify Slack on Failure
       # - name: Send Slack Notification on Failure
