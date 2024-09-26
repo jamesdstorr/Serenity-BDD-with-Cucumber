@@ -55,7 +55,8 @@ jobs:
           name: Serenity-Test-Reports
           path: target/site/serenity
 
-      - name: Publish Test Results
+     # - name: Publish Test Results
+
         # Removed or adjusted as per Option 1 or 2
 
   release-please:
