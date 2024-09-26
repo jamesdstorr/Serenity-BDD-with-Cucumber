@@ -68,7 +68,7 @@ jobs:
         with:
           name: Serenity BDD Tests
           path: target/surefire-reports/*.xml  # Ensure this path matches your JUnit reports
-          reporter: junit
+          reporter: junit-xml
 
       # Optional: Notify Slack on Failure
       # - name: Send Slack Notification on Failure
