@@ -1,0 +1,78 @@
+name: BDD Tests
+
+on:
+  push:
+    branches:
+      - '**'       # Triggers on push to any branch
+  pull_request:
+    branches:
+      - '**'       # Triggers on pull requests targeting any branch
+
+jobs:
+  run-bdd-tests:
+    name: Execute BDD Tests with Serenity
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      # 2. Set Up JDK
+      - name: Set Up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'  # You can use 'adopt' or other distributions if preferred
+          java-version: '17'        # Update to your project's Java version
+
+      # 3. Cache Maven Dependencies
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # 4. Display Java and Maven Versions (Optional)
+      - name: Display Java Version
+        run: java -version
+
+      - name: Display Maven Version
+        run: mvn -version
+
+      # 5. Run Only BDD Tests
+      - name: Run BDD Tests
+        run: mvn clean verify -Dtest=com.jamesstorr.jokes_service.bdd.runner.SpringRunnerTests
+
+      # 6. Archive Serenity Reports
+      - name: Archive Serenity Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Serenity-Test-Reports
+          path: target/site/serenity
+
+      # 7. Publish Test Results
+      - name: Publish Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Serenity BDD Tests
+          path: target/site/serenity
+          reporter: serenity
+
+      # 8. Optional: Notify Slack on Failure
+      # - name: Send Slack Notification on Failure
+      #   if: failure()
+      #   uses: slackapi/slack-github-action@v1.23.0
+      #   with:
+      #     payload: |
+      #       {
+      #         "text": "BDD Tests Failed in <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|this run>."
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
