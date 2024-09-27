@@ -87,6 +87,7 @@ jobs:
         uses: google-github-actions/release-please-action@v3
         with:
           release-type: 'java'  # Specifies Java project
+          main-branch: 'main'
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           DEBUG: 'release-please*'  # Optional: Enable debug logging

@@ -16,3 +16,7 @@ This report will be generated and published everytime the CI Pipeline is execute
 
 Whenever a push or merge into the Main branch takes place, the CI Pipline will push the changes into the release-please--branches--main
 and update the CHANGELOG to reflect all the fixes and features for the new version.
+
+When comitting to the main branch, include Release-As: X.X.X (Case Sensitive) in the commit body. Release Please will open a new pull request for the specified version.
+
+`git commit --allow-empty -m "chore: release 2.0.0" -m "Release-As: 2.0.0"`

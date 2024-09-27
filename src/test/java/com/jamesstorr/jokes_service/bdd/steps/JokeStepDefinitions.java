@@ -18,6 +18,11 @@ public class JokeStepDefinitions {
         actions.givenJokeProvider(provider);
     }
 
+    @Given("a joke with no provider")
+    public void aJokeWithNoProvider(){
+        actions.givenNoJokeProvider();
+    }
+
     @When("I request a joke")
     public void iRequestAJoke() {
         actions.whenIRequestAJoke();
@@ -27,4 +32,6 @@ public class JokeStepDefinitions {
     public void iShouldReceiveAJokeWithProvider(String provider) {
         actions.thenIShouldReceiveAJokeWithProvider(provider);
     }
+
+
 }
